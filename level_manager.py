@@ -10,6 +10,9 @@ class LevelManager:
     for level in self.levels[:]:
       level.update()
 
+  def load_level(self,level) :
+    print('load level')
+
   def create(self, data):
     for d in data[:]:
       level = Level()

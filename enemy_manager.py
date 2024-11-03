@@ -2,8 +2,9 @@ import pygame
 from enemy import Enemy
 
 class EnemyManager:
-  def __init__(self, screen):
+  def __init__(self, screen, hud):
     self.screen = screen
+    self.hud = hud
     self.enemies = []
     self.spawn_locations = [(0,100),(0,200),(0,300),(0,400),(0,500)]
     self.spawn_points = []
@@ -15,9 +16,18 @@ class EnemyManager:
 
   def update(self):
     for enemy in self.enemies[:]:
-      if enemy.update(self.screen):
+      if enemy.arrived:
+        self.hud.update_health(-1)
         self.enemies.remove(enemy)
-    
+        continue
+
+      if enemy.health <= 0:
+        self.hud.update_coins(enemy.value)
+        self.enemies.remove(enemy)
+        continue
+
+      enemy.update(self.screen)
+
     if self.enemy_types:
       self.spawn()
 

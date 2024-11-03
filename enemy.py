@@ -7,12 +7,14 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 class Enemy:
-  def __init__(self, pos, width, height, speed):
+  def __init__(self, pos, width, height, speed, value=50):
     self.x = pos[0]
     self.y = pos[1]
     self.width = width
     self.height = height
     self.speed = speed
+    self.value = value
+    self.arrived = False
     self.health = 10
     self.path = []
     self.rect = pygame.Rect(self.x - width/2, self.y - height/2, width, height)
@@ -49,16 +51,11 @@ class Enemy:
 
     # If the enemy has reached the goal or is out of bounds, return True
     if not self.path or self.x < 0 or self.y < 0 or self.x > SCREEN_WIDTH or self.y > SCREEN_HEIGHT:
-      return True
+      self.arrived = True
 
   def update(self, screen):
     self.draw(screen)
-    if self.move():
-      return True
-
-    if self.health <= 0:
-      return True
-    return False
+    self.move()
 
   def calculate_path(self, rows, goal):
     start = (int(self.x // CELL_SIZE), int(self.y // CELL_SIZE))

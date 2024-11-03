@@ -9,12 +9,24 @@ class Hud:
     self.background = pygame.Rect(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, 200)
     self.selected_card = None
     self.coins = 120
+    self.health = 1
+    self.game_over = False
     self.tower_cards = [
       TowerCard((10, SCREEN_HEIGHT - 200 + 10), (0, 255, 255), (0, 200, 255), 50),
       TowerCard((100, SCREEN_HEIGHT - 200 + 10), (50, 250, 50), (50, 200, 50), 100)]
 
   def update(self):
     self.draw()
+
+  def update_health(self, value):
+    self.health += value
+    if self.health <= 0:
+      self.game_over = True
+
+  def reset(self):
+    self.coins = 120
+    self.health = 1
+    self.game_over = False
 
   def update_coins(self, value):
     self.coins += value
@@ -34,6 +46,10 @@ class Hud:
     coins_text = self.font.render(f"Coins: {self.coins}", True, (255, 255, 255))
     coins_text_rect = coins_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 180))
     self.screen.blit(coins_text, coins_text_rect)
+
+    health_text = self.font.render(f"Health: {self.health}", True, (255, 255, 255))
+    health_text_rect = health_text.get_rect(center=(SCREEN_WIDTH // 2 + (SCREEN_WIDTH // 2) // 2, SCREEN_HEIGHT - 180))
+    self.screen.blit(health_text, health_text_rect)
 
     # Draw the tower cards
     for tower in self.tower_cards:
