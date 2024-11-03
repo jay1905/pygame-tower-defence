@@ -15,9 +15,6 @@ class Hud:
       TowerCard((10, SCREEN_HEIGHT - 200 + 10), (0, 255, 255), (0, 200, 255), 50),
       TowerCard((100, SCREEN_HEIGHT - 200 + 10), (50, 250, 50), (50, 200, 50), 100)]
 
-  def update(self):
-    self.draw()
-
   def update_health(self, value):
     self.health += value
     if self.health <= 0:

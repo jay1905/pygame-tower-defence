@@ -11,9 +11,6 @@ class Grid:
             row.append(0)
         self.rows.append(row)
 
-  def update(self):
-    self.draw()
-
   def draw(self):
     for i in range(GRID_HEIGHT):
       for j in range(GRID_WIDTH):

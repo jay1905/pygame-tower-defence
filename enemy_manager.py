@@ -52,8 +52,9 @@ class EnemyManager:
     for enemy in self.enemies[:]:
       enemy.calculate_path(self.rows)
 
-
-
+  def spawn_wave(self, wave):
+    # Implement the logic to spawn the next wave of enemies
+    print(f"Spawning wave {wave}")
 
 
 

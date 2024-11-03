@@ -4,6 +4,7 @@ from config import CELL_SIZE, SCREEN_WIDTH, SCREEN_HEIGHT, GAME_HEIGHT, GRID_WID
 
 class LevelManager:
   def __init__(self):
+    self.current_level = 0
     self.levels = []
 
   def update(self):
@@ -15,6 +16,6 @@ class LevelManager:
 
   def create(self, data):
     for d in data[:]:
-      level = Level()
+      level = Level(d[1])
       self.levels.append(level)
       print('create level')
