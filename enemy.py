@@ -15,6 +15,7 @@ class Enemy:
     self.speed = speed
     self.value = value
     self.arrived = False
+    self.goal = (39, pos[1] // CELL_SIZE)
     self.health = 10
     self.path = []
     self.rect = pygame.Rect(self.x - width/2, self.y - height/2, width, height)
@@ -57,10 +58,10 @@ class Enemy:
     self.draw(screen)
     self.move()
 
-  def calculate_path(self, rows, goal):
+  def calculate_path(self, rows):
     start = (int(self.x // CELL_SIZE), int(self.y // CELL_SIZE))
-    came_from, cost_so_far = a_star_search(rows, start, goal)
-    path = reconstruct_path(came_from, start, goal)
+    came_from, cost_so_far = a_star_search(rows, start, self.goal)
+    path = reconstruct_path(came_from, start, self.goal)
     self.path = path
 
   def draw_path(self, screen):

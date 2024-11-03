@@ -40,7 +40,7 @@ class EnemyManager:
     if self.can_spawn >= self.spawn_speed:
       self.can_spawn = 0
       enemy = Enemy(self.spawn_locations[self.spawn_points[0]], 15, 15, 2)
-      enemy.calculate_path(self.rows, (39,3))
+      enemy.calculate_path(self.rows)
 
       self.enemies.append(enemy)
       self.spawn_points.remove(self.spawn_points[0])
@@ -50,7 +50,7 @@ class EnemyManager:
 
   def recalaulate_path(self):
     for enemy in self.enemies[:]:
-      enemy.calculate_path(self.rows, (39,3))
+      enemy.calculate_path(self.rows)
 
 
 
