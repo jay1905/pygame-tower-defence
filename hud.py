@@ -111,6 +111,12 @@ class Hud:
       # Spawn the next wave
       self.current_level += 1
       self.enemy_manager.spawn_wave(self.current_level)
+      self.enemy_manager.spawn_wave(self.current_level)
+      self.enemy_manager.update_enemy_spawner(self.levels[self.current_level].spawn_points,
+                                           self.levels[self.current_level].enemy_types,
+                                           self.levels[self.current_level].spawn_speed,
+                                           self.levels[self.current_level].enemy_spawn_times,
+                                           self.levels[self.current_level].level_time)
       self.set_bar_moving_spead(self.levels[self.current_level].level_time)
     # Move the bar from right to left
     BAR_POSITION[0] -= self.bar_movement_speed
