@@ -38,12 +38,6 @@ game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGH
 restart_button_text = menu_font.render("Restart", True, (255, 255, 255))
 restart_button_rect = restart_button_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
 
-# Define the clipping region (selected area)
-CLIP_RECT = pygame.Rect(SCREEN_WIDTH // 4, SCREEN_HEIGHT - 50, SCREEN_WIDTH // 2, 50)
-
-# Create surfaces for different layers
-background_layer = pygame.Surface((SCREEN_WIDTH // 2 , 50))
-
 def update():
   enemy_manager.update()
   tower_manager.update(enemy_manager.enemies)
@@ -53,15 +47,6 @@ def draw():
   screen.fill((100, 100, 100))
   hud.draw()
   grid.draw()
-
-  # Set the clipping region
-  screen.set_clip(CLIP_RECT)
-  background_layer.fill((200, 200, 200))  # Fill with a background color
-  screen.blit(background_layer, (SCREEN_WIDTH // 4, SCREEN_HEIGHT - 50))
-  # Draw the moving bar
-  draw_moving_bar(screen)
-  # Reset the clipping region
-  screen.set_clip(None)
 
 def draw_loading_bar(screen, progress):
   # Draw the background of the loading bar
@@ -75,27 +60,6 @@ def draw_loading_bar(screen, progress):
   coins_text = font.render(f"Loading: Level 1", True, (255, 255, 255))
   coins_text_rect = coins_text.get_rect(center=(LOADING_BAR_POSITION[0] + LOADING_BAR_WIDTH // 2, LOADING_BAR_POSITION[1] - 20))
   screen.blit(coins_text, coins_text_rect)
-
-def draw_moving_bar(screen):
-  # Draw the background of the bar
-  pygame.draw.rect(screen, BAR_BG_COLOR, (*BAR_POSITION, SEGMENT_WIDTH * len(level_manager.levels), BAR_HEIGHT))
-  
-  # Draw each color segment
-  for i, level in enumerate(level_manager.levels):
-    segment_start = BAR_POSITION[0] + i * SEGMENT_WIDTH
-    pygame.draw.rect(screen, level.color, (segment_start, BAR_POSITION[1], SEGMENT_WIDTH, BAR_HEIGHT))
-      # Draw the wave count text
-    wave_text = font.render(f"Wave {i + 1}", True, (255, 255, 255))
-    wave_text_rect = wave_text.get_rect(center=(segment_start + SEGMENT_WIDTH // 2, BAR_POSITION[1] + BAR_HEIGHT // 2))
-    screen.blit(wave_text, wave_text_rect)
-
-  # Check if the segment reaches the start of the mask
-  if BAR_POSITION[0] + (level_manager.current_level * SEGMENT_WIDTH) <= SCREEN_WIDTH // 4:
-    # Spawn the next wave
-    level_manager.current_level += 1
-    enemy_manager.spawn_wave(level_manager.current_level)
-  # Move the bar from right to left
-  BAR_POSITION[0] -= 1
 
 def draw_main_menu(screen):
   screen.fill((100, 100, 100))
@@ -133,6 +97,8 @@ def main():
     [4, BAR_COLORS[0]]
   ])
   enemy_manager.rows = grid.rows
+  hud.levels = level_manager.levels
+  hud.enemy_manager = enemy_manager
 
   while running:
     clock.tick(60) 
@@ -184,7 +150,12 @@ def main():
         progress = level_loading / 240
         draw_loading_bar(screen, progress)
       elif level_loaded == False:
-        enemy_manager.update_enemy_spawner(level_manager.levels[0].spawn_points, level_manager.levels[0].enemy_types, level_manager.levels[0].spawn_speed)
+        print("Level updated")
+        enemy_manager.update_enemy_spawner(level_manager.levels[0].spawn_points,
+                                           level_manager.levels[0].enemy_types,
+                                           level_manager.levels[0].spawn_speed,
+                                           level_manager.levels[0].enemy_spawn_times,
+                                           level_manager.levels[0].level_time)
         level_loaded = True
 
     # Update the display
